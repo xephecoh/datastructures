@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TestList {
-    ArrayListImp myList = new ArrayListImp();
+    ArrayList myList = new ArrayList();
     @BeforeEach
     public void init(){
         myList.add("ONE");

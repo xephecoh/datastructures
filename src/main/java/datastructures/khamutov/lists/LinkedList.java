@@ -2,7 +2,7 @@ package datastructures.khamutov.lists;
 
 import java.util.Objects;
 
-public class LinkedListImp<T> implements List {
+public class LinkedList<T> implements List {
     static class Node<T> {
         T element;
         Node<T> next;

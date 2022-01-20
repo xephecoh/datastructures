@@ -2,7 +2,7 @@ package datastructures.khamutov.lists;
 
 import java.util.Objects;
 
-public class ArrayListImp implements List {
+public class ArrayList implements List {
 
 
     private Object[] arraylist;
@@ -12,7 +12,7 @@ public class ArrayListImp implements List {
 
 
 
-    public ArrayListImp(int capacity) {
+    public ArrayList(int capacity) {
         if (capacity < 0) {
             throw new IllegalArgumentException("list should be bigger then 0");
         } else {
@@ -20,7 +20,7 @@ public class ArrayListImp implements List {
         }
     }
 
-    public ArrayListImp() {
+    public ArrayList() {
         arraylist = new Object[DEFAULT_CAPACITY];
     }
 
