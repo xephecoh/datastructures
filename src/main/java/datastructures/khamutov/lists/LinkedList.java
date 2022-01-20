@@ -131,20 +131,20 @@ public class LinkedList<T> implements List {
             if (current.element.equals(value)) {
                 return i;
             }
-            current=current.next;
+            current = current.next;
         }
         return -1;
     }
 
     @Override
     public int lastIndexOf(Object value) {
-        int counter=-1;
+        int counter = -1;
         Node<T> current = first;
         for (int i = 0; i < size; i++) {
             if (current.element.equals(value)) {
-                counter =i;
+                counter = i;
             }
-            current=current.next;
+            current = current.next;
         }
         return counter;
     }
