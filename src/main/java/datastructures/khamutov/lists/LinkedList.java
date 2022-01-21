@@ -1,5 +1,6 @@
 package datastructures.khamutov.lists;
 
+import java.util.Iterator;
 import java.util.Objects;
 
 public class LinkedList<T> implements List {
@@ -148,4 +149,9 @@ public class LinkedList<T> implements List {
         }
         return counter;
     }
+    @Override
+    public Iterator iterator() {
+        return null;
+    }
+
 }

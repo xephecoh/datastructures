@@ -3,7 +3,7 @@ package datastructures.khamutov.lists;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class ArrayList implements List, Iterable {
+public class ArrayList implements List {
 
 
     private Object[] arraylist;
@@ -153,7 +153,7 @@ public class ArrayList implements List, Iterable {
 
             @Override
             public boolean hasNext() {
-                return !arraylist[counter + 1].equals(null);
+                return arraylist[counter + 1] != null;
             }
 
             @Override
@@ -165,7 +165,7 @@ public class ArrayList implements List, Iterable {
 
             @Override
             public void remove() {
-                myRemove(counter  );
+                myRemove(counter-1);
             }
         };
     }
