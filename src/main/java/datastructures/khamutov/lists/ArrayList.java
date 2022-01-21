@@ -1,15 +1,15 @@
 package datastructures.khamutov.lists;
 
+import java.util.Iterator;
 import java.util.Objects;
 
-public class ArrayList implements List {
+public class ArrayList implements List, Iterable {
 
 
     private Object[] arraylist;
     private int size;
     private final int DEFAULT_CAPACITY = 10;
     private final double LOAD_FACTOR = 1.5;
-
 
 
     public ArrayList(int capacity) {
@@ -27,23 +27,34 @@ public class ArrayList implements List {
     @Override
     public void add(Object o) {
         increaseSizeIfNeeded();
-        arraylist[size] =  o;
+        arraylist[size] = o;
         size++;
     }
 
 
     public void increaseSizeIfNeeded() {
         if (arraylist.length == size) {
-            Object[] tempArray =  new Object[(int) (arraylist.length * LOAD_FACTOR)];
+            Object[] tempArray = new Object[(int) (arraylist.length * LOAD_FACTOR)];
             System.arraycopy(arraylist, 0, tempArray, 0, size);
             arraylist = tempArray;
         }
     }
 
+    public void checkBound(int index) {
+        if (index >= size) {
+            throw new ArrayIndexOutOfBoundsException("Index is beyond list size");
+        }
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException("Index is negative");
+        }
+    }
+
+
 
     @Override
     public void add(Object value, int index) {
-        Objects.checkIndex(index, size + 1);
+        checkBound(index);
+        //Objects.checkIndex(index, size + 1);
         increaseSizeIfNeeded();
         System.arraycopy(arraylist, index, arraylist, index + 1, size - index);
         arraylist[index] = value;
@@ -54,12 +65,16 @@ public class ArrayList implements List {
 
     @Override
     public Object remove(int i) {
-        Objects.checkIndex(i, size);
+        checkBound(i);
         Object removedElement = arraylist[i];
         System.arraycopy(arraylist, i + 1, arraylist, i, size - i - 1);
         size--;
         return removedElement;
     }
+    public Object myRemove(int i){
+        return remove(i);
+    }
+
 
     @Override
     public Object get(int i) {
@@ -72,14 +87,14 @@ public class ArrayList implements List {
     public Object set(Object o, int i) {
         Objects.checkIndex(i, size);
         Object t = arraylist[i];
-        arraylist[i] =  o;
+        arraylist[i] = o;
         return t;
     }
 
     @Override
     public void clear() {
         size = 0;
-        arraylist =  new Object[DEFAULT_CAPACITY];
+        arraylist = new Object[DEFAULT_CAPACITY];
     }
 
     @Override
@@ -130,4 +145,28 @@ public class ArrayList implements List {
         return result.toString();
     }
 
+    @Override
+    public Iterator iterator() {
+        return new Iterator() {
+
+            int counter = 0;
+
+            @Override
+            public boolean hasNext() {
+                return !arraylist[counter + 1].equals(null);
+            }
+
+            @Override
+            public Object next() {
+                Object currentValue =arraylist[counter];
+                counter++;
+                return currentValue;
+            }
+
+            @Override
+            public void remove() {
+                myRemove(counter  );
+            }
+        };
+    }
 }
