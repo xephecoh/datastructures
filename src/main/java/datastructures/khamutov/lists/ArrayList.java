@@ -4,12 +4,13 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class ArrayList implements List {
+    private final static int DEFAULT_CAPACITY = 10;
+    private final static double LOAD_FACTOR = 1.5;
 
 
     private Object[] arraylist;
     private int size;
-    private final int DEFAULT_CAPACITY = 10;
-    private final double LOAD_FACTOR = 1.5;
+
 
 
     public ArrayList(int capacity) {
@@ -32,36 +33,15 @@ public class ArrayList implements List {
     }
 
 
-    public void increaseSizeIfNeeded() {
-        if (arraylist.length == size) {
-            Object[] tempArray = new Object[(int) (arraylist.length * LOAD_FACTOR)];
-            System.arraycopy(arraylist, 0, tempArray, 0, size);
-            arraylist = tempArray;
-        }
-    }
-
-    public void checkBound(int index) {
-        if (index >= size) {
-            throw new ArrayIndexOutOfBoundsException("Index is beyond list size");
-        }
-        if (index < 0) {
-            throw new ArrayIndexOutOfBoundsException("Index is negative");
-        }
-    }
-
-
-
     @Override
     public void add(Object value, int index) {
-        checkBound(index);
-        //Objects.checkIndex(index, size + 1);
+        checkBoundForAdd(index);
         increaseSizeIfNeeded();
         System.arraycopy(arraylist, index, arraylist, index + 1, size - index);
         arraylist[index] = value;
         size++;
 
     }
-
 
     @Override
     public Object remove(int i) {
@@ -71,9 +51,7 @@ public class ArrayList implements List {
         size--;
         return removedElement;
     }
-    public Object myRemove(int i){
-        return remove(i);
-    }
+
 
 
     @Override
@@ -153,7 +131,7 @@ public class ArrayList implements List {
 
             @Override
             public boolean hasNext() {
-                return arraylist[counter + 1] != null;
+                return counter<size;
             }
 
             @Override
@@ -165,8 +143,34 @@ public class ArrayList implements List {
 
             @Override
             public void remove() {
-                myRemove(counter-1);
+                ArrayList.this.remove(counter-1);
             }
         };
+    }
+
+    private void increaseSizeIfNeeded() {
+        if (arraylist.length == size) {
+            Object[] tempArray = new Object[(int) (arraylist.length * LOAD_FACTOR)];
+            System.arraycopy(arraylist, 0, tempArray, 0, size);
+            arraylist = tempArray;
+        }
+    }
+
+    private void checkBound(int index) {
+        if (index >= size) {
+            throw new ArrayIndexOutOfBoundsException("Index is beyond list size");
+        }
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException("Index is negative");
+        }
+    }
+
+    private void checkBoundForAdd(int index) {
+        if (index >= size-1) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index +" is beyond list size");
+        }
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is negative");
+        }
     }
 }

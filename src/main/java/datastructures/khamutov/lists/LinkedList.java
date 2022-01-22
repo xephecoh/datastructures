@@ -1,5 +1,6 @@
 package datastructures.khamutov.lists;
 
+import java.io.ObjectStreamException;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -33,7 +34,9 @@ public class LinkedList<T> implements List {
 
     @Override
     public void add(Object value, int index) {
-        Objects.checkIndex(index, size + 1);
+        // Objects.checkIndex(index, size + 1);
+        checkBoundForAdd(index);
+
         Node<T> newNode = new Node(value);
         if (first == null) {
             first = last = newNode;
@@ -149,9 +152,57 @@ public class LinkedList<T> implements List {
         }
         return counter;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder result = new StringBuilder("[");
+        Node<T> currentNode = first;
+        for (int i = 0; i < size - 1; i++) {
+            result.append(currentNode.element);
+            result.append(",");
+            currentNode = currentNode.next;
+        }
+         result.append(last.element);
+        //result = result.delete(result.length() - 1, result.length());
+       // result = result.delete(result.length() - 1, result.length());
+        result.append("]");
+        return result.toString();
+    }
+
     @Override
     public Iterator iterator() {
-        return null;
+        return new Iterator() {
+
+            int counter = 0;
+            Node<T> currentValue = first;
+
+            @Override
+            public boolean hasNext() {
+                return counter < size;
+            }
+
+            @Override
+            public Node<T> next() {
+                Node<T> tempValue = currentValue;
+                counter++;
+                currentValue = currentValue.next;
+                return tempValue;
+            }
+
+            @Override
+            public void remove() {
+                LinkedList.this.remove(counter-1);
+            }
+        };
+    }
+
+    private void checkBoundForAdd(int index) {
+        if (index >= size - 1) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is beyond list size");
+        }
+        if (index < 0) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is negative");
+        }
     }
 
 }
