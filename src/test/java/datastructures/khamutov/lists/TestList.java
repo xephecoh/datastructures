@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 
 public abstract class TestList {
-    List<String> myList = getList();
+    List<String> testList = getList();
     private static final int ITERATION_NUMBER = 3;
 
     protected abstract List<String> getList();
@@ -17,53 +17,53 @@ public abstract class TestList {
 
     @BeforeEach
     public void init() {
-        myList.add("ONE");
-        myList.add("TWO");
-        myList.add("THREE");
-        myList.add("FOUR");
-        myList.add("FIVE");
+        testList.add("ONE");
+        testList.add("TWO");
+        testList.add("THREE");
+        testList.add("FOUR");
+        testList.add("FIVE");
     }
 
     @Test
     public void testAddAndGet() {
-        myList.add("ONE AND HALF", 1);
-        assertEquals("ONE AND HALF", myList.get(1));
-        assertEquals("[ONE,ONE AND HALF,TWO,THREE,FOUR,FIVE]", myList.toString());
+        testList.add("ONE AND HALF", 1);
+        assertEquals("ONE AND HALF", testList.get(1));
+        assertEquals("[ONE,ONE AND HALF,TWO,THREE,FOUR,FIVE]", testList.toString());
     }
 
 
     @Test
     public void testToString() {
-        myList.remove(4);
-        assertEquals("[ONE,TWO,THREE,FOUR]", myList.toString());
+        testList.remove(4);
+        assertEquals("[ONE,TWO,THREE,FOUR]", testList.toString());
     }
 
     @Test
     public void testRemove() {
-        assertEquals("TWO", myList.remove(1));
-        assertEquals("[ONE,THREE,FOUR,FIVE]", myList.toString());
+        assertEquals("TWO", testList.remove(1));
+        assertEquals("[ONE,THREE,FOUR,FIVE]", testList.toString());
     }
 
     @Test
     public void testSet() {
-        assertEquals("TWO", myList.remove(1));
+        assertEquals("TWO", testList.remove(1));
     }
 
     @Test
     public void testIsEmpty() {
-        assertFalse(myList.isEmpty());
+        assertFalse(testList.isEmpty());
     }
 
     @Test
     public void testContains() {
-        assertTrue(myList.contains("THREE"));
+        assertTrue(testList.contains("THREE"));
     }
 
     @Test
     public void outOfBoundInsertionTest() {
         Exception exception = Assertions.assertThrows(
                 IndexOutOfBoundsException.class,
-                () -> myList.add("FOUR", 5)
+                () -> testList.add("FOUR", 5)
         );
         String outOfBoundMassage = exception.getMessage();
         assertEquals("Index " + 5 + " is beyond list size", outOfBoundMassage);
@@ -73,7 +73,7 @@ public abstract class TestList {
     public void negativeTest() {
         Exception ex = Assertions.assertThrows(
                 IndexOutOfBoundsException.class,
-                () -> myList.add("FIVE", -7)
+                () -> testList.add("FIVE", -7)
         );
         String negativeCaseMessage = ex.getMessage();
         assertEquals("Index " + -7 + " is negative", negativeCaseMessage);
@@ -81,42 +81,42 @@ public abstract class TestList {
 
     @Test
     public void testGet() {
-        assertEquals("FIVE", myList.get(4));
+        assertEquals("FIVE", testList.get(4));
     }
 
     @Test
     public void addToListChangeSize() {
-        int size = myList.size();
+        int size = testList.size();
         for (int i = 0; i < ITERATION_NUMBER; i++) {
-            myList.add(null);
+            testList.add(null);
         }
-        assertEquals(size + ITERATION_NUMBER, myList.size());
-        myList.add("SEVEN");
-        assertEquals(9, myList.size());
+        assertEquals(size + ITERATION_NUMBER, testList.size());
+        testList.add("SEVEN");
+        assertEquals(9, testList.size());
     }
 
     @Test
     public void testIteratorRemoveForLinkedList() {
-        Iterator it = myList.iterator();
+        Iterator it = testList.iterator();
         while (it.hasNext()) {
             LinkedList.Node<String> o = (LinkedList.Node<String>) it.next();
             if (o.element.equals("FIVE")) {
                 it.remove();
             }
         }
-        assertEquals("[ONE,TWO,THREE,FOUR]", myList.toString());
+        assertEquals("[ONE,TWO,THREE,FOUR]", testList.toString());
     }
 
     @Test
     public void testIteratorForArrayList() {
-        Iterator it = myList.iterator();
+        Iterator it = testList.iterator();
         while (it.hasNext()) {
             Object o = it.next();
             if (o.equals("FIVE")) {
                 it.remove();
             }
         }
-        assertEquals("[ONE,TWO,THREE,FOUR]", myList.toString());
+        assertEquals("[ONE,TWO,THREE,FOUR]", testList.toString());
     }
 
 

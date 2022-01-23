@@ -45,7 +45,7 @@ public class ArrayList<T> implements List<T> {
     @Override
     public T remove(int i) {
         checkBound(i);
-        T removedElement = (T)arraylist[i];
+        Object removedElement =arraylist[i];
         System.arraycopy(arraylist, i + 1, arraylist, i, size - i - 1);
         size--;
         return (T) removedElement;
@@ -62,9 +62,9 @@ public class ArrayList<T> implements List<T> {
     @Override
     public T set(Object o, int i) {
         Objects.checkIndex(i, size);
-        Object t = arraylist[i];
+        Object value = arraylist[i];
         arraylist[i] = o;
-        return (T) t;
+        return (T) value;
     }
 
     @Override
