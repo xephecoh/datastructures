@@ -34,7 +34,8 @@ public abstract class TestList {
 
     @Test
     public void testToString() {
-        assertEquals("[ONE,TWO,THREE,FOUR,FIVE]", myList.toString());
+        myList.remove(4);
+        assertEquals("[ONE,TWO,THREE,FOUR]", myList.toString());
     }
 
     @Test
@@ -118,16 +119,6 @@ public abstract class TestList {
         assertEquals("[ONE,TWO,THREE,FOUR]", myList.toString());
     }
 
-    @Test
-    public void testIteratorIsNext1() {
-        Iterator it = myList.iterator();
-        while (it.hasNext()) {
-            Object o = it.next();
-            if (o.equals("FIVE")) {
-                it.remove();
-            }
-        }
-        assertEquals("[ONE,TWO,THREE,FOUR]", myList.toString());
-    }
+
 
 }

@@ -34,9 +34,7 @@ public class LinkedList<T> implements List {
 
     @Override
     public void add(Object value, int index) {
-        // Objects.checkIndex(index, size + 1);
         checkBoundForAdd(index);
-
         Node<T> newNode = new Node(value);
         if (first == null) {
             first = last = newNode;
