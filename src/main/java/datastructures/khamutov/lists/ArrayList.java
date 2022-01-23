@@ -3,14 +3,13 @@ package datastructures.khamutov.lists;
 import java.util.Iterator;
 import java.util.Objects;
 
-public class ArrayList implements List {
+public class ArrayList<T> implements List<T> {
     private final static int DEFAULT_CAPACITY = 10;
     private final static double LOAD_FACTOR = 1.5;
 
 
     private Object[] arraylist;
     private int size;
-
 
 
     public ArrayList(int capacity) {
@@ -26,15 +25,15 @@ public class ArrayList implements List {
     }
 
     @Override
-    public void add(Object o) {
+    public void add(T value) {
         increaseSizeIfNeeded();
-        arraylist[size] = o;
+        arraylist[size] = value;
         size++;
     }
 
 
     @Override
-    public void add(Object value, int index) {
+    public void add(T value, int index) {
         checkBoundForAdd(index);
         increaseSizeIfNeeded();
         System.arraycopy(arraylist, index, arraylist, index + 1, size - index);
@@ -44,29 +43,28 @@ public class ArrayList implements List {
     }
 
     @Override
-    public Object remove(int i) {
+    public T remove(int i) {
         checkBound(i);
-        Object removedElement = arraylist[i];
+        T removedElement = (T)arraylist[i];
         System.arraycopy(arraylist, i + 1, arraylist, i, size - i - 1);
         size--;
-        return removedElement;
+        return (T) removedElement;
     }
 
 
-
     @Override
-    public Object get(int i) {
+    public T get(int i) {
         Objects.checkIndex(i, size);
-        return arraylist[i];
+        return (T) arraylist[i];
     }
 
 
     @Override
-    public Object set(Object o, int i) {
+    public T set(Object o, int i) {
         Objects.checkIndex(i, size);
         Object t = arraylist[i];
         arraylist[i] = o;
-        return t;
+        return (T) t;
     }
 
     @Override
@@ -126,24 +124,23 @@ public class ArrayList implements List {
     @Override
     public Iterator iterator() {
         return new Iterator() {
-
             int counter = 0;
 
             @Override
             public boolean hasNext() {
-                return counter<size;
+                return counter < size;
             }
 
             @Override
             public Object next() {
-                Object currentValue =arraylist[counter];
+                Object currentValue = arraylist[counter];
                 counter++;
                 return currentValue;
             }
 
             @Override
             public void remove() {
-                ArrayList.this.remove(counter-1);
+                ArrayList.this.remove(counter - 1);
             }
         };
     }
@@ -166,8 +163,8 @@ public class ArrayList implements List {
     }
 
     private void checkBoundForAdd(int index) {
-        if (index >= size-1) {
-            throw new ArrayIndexOutOfBoundsException("Index " + index +" is beyond list size");
+        if (index >= size - 1) {
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " is beyond list size");
         }
         if (index < 0) {
             throw new ArrayIndexOutOfBoundsException("Index " + index + " is negative");

@@ -1,10 +1,10 @@
 package datastructures.khamutov.lists;
 
-import java.io.ObjectStreamException;
+
 import java.util.Iterator;
 import java.util.Objects;
 
-public class LinkedList<T> implements List {
+public class LinkedList<T> implements List<T> {
     static class Node<T> {
         T element;
         Node<T> next;
@@ -20,7 +20,7 @@ public class LinkedList<T> implements List {
 
 
     @Override
-    public void add(Object value) {
+    public void add(T value) {
         Node<T> newNode = new Node(value);
         if (first == null) {
             first = this.last = newNode;
@@ -33,7 +33,7 @@ public class LinkedList<T> implements List {
     }
 
     @Override
-    public void add(Object value, int index) {
+    public void add(T value, int index) {
         checkBoundForAdd(index);
         Node<T> newNode = new Node(value);
         if (first == null) {
@@ -61,7 +61,7 @@ public class LinkedList<T> implements List {
     }
 
     @Override
-    public Object remove(int index) {
+    public T remove(int index) {
         Objects.checkIndex(index, size);
         T removedElement;
         if (index == 0) {
@@ -83,14 +83,14 @@ public class LinkedList<T> implements List {
     }
 
     @Override
-    public Object get(int index) {
+    public T get(int index) {
         Objects.checkIndex(index, size);
         Node<T> currentNode = getNodeByIndex(index);
         return currentNode.element;
     }
 
     @Override
-    public Object set(Object element, int index) {
+    public T set(Object element, int index) {
         Objects.checkIndex(index, size);
         Node<T> currentNode = getNodeByIndex(index);
         currentNode.element = (T) element;

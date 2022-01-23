@@ -1,15 +1,15 @@
 package datastructures.khamutov.lists;
 
 // Abstract Data Type
-public interface List extends Iterable {
+public interface List<T> extends Iterable {
     // add value to the end of the list
-    void add(Object value);
+    void add(T value);
 
     // [A, B, C, null, null] size = 3
     // add (D, [0,1,2,3]) => add(F, 4)
     // we can add value by index between [0, size]
     // otherwise throw new IndexOutOfBoundsException
-    void add(Object value, int index);
+    void add(T value, int index);
 
     // we can remove value by index between [0, size - 1]
     // otherwise throw new IndexOutOfBoundsException

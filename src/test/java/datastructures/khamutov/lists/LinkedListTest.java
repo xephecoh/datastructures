@@ -2,7 +2,7 @@ package datastructures.khamutov.lists;
 
 public class LinkedListTest extends TestList{
     @Override
-    protected List getList() {
+    protected List<String> getList() {
         return new LinkedList<>();
     }
 }

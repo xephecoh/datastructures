@@ -9,10 +9,10 @@ import org.junit.jupiter.api.Test;
 import java.util.Iterator;
 
 public abstract class TestList {
-    List myList = getList();
+    List<String> myList = getList();
     private static final int ITERATION_NUMBER = 3;
 
-    protected abstract List getList();
+    protected abstract List<String> getList();
 
 
     @BeforeEach
@@ -28,9 +28,9 @@ public abstract class TestList {
     public void testAddAndGet() {
         myList.add("ONE AND HALF", 1);
         assertEquals("ONE AND HALF", myList.get(1));
-        List list = myList;
-
+        assertEquals("[ONE,ONE AND HALF,TWO,THREE,FOUR,FIVE]", myList.toString());
     }
+
 
     @Test
     public void testToString() {
@@ -41,7 +41,7 @@ public abstract class TestList {
     @Test
     public void testRemove() {
         assertEquals("TWO", myList.remove(1));
-        assertEquals("[ONE,THREE,FOUR,FIVE]",myList.toString());
+        assertEquals("[ONE,THREE,FOUR,FIVE]", myList.toString());
     }
 
     @Test
@@ -81,7 +81,7 @@ public abstract class TestList {
 
     @Test
     public void testGet() {
-        assertEquals("ONE", myList.get(0));
+        assertEquals("FIVE", myList.get(4));
     }
 
     @Test
@@ -90,13 +90,13 @@ public abstract class TestList {
         for (int i = 0; i < ITERATION_NUMBER; i++) {
             myList.add(null);
         }
-        assertEquals(size+ ITERATION_NUMBER, myList.size());
+        assertEquals(size + ITERATION_NUMBER, myList.size());
         myList.add("SEVEN");
         assertEquals(9, myList.size());
     }
 
     @Test
-    public void testIteratorForLinkedList() {
+    public void testIteratorRemoveForLinkedList() {
         Iterator it = myList.iterator();
         while (it.hasNext()) {
             LinkedList.Node<String> o = (LinkedList.Node<String>) it.next();
@@ -118,7 +118,6 @@ public abstract class TestList {
         }
         assertEquals("[ONE,TWO,THREE,FOUR]", myList.toString());
     }
-
 
 
 }
