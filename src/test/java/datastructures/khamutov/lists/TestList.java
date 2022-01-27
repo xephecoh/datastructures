@@ -95,9 +95,9 @@ public abstract class TestList {
         assertEquals(9, testList.size());
     }
 
-    @Test
+  /*  @Test
     public void testIteratorRemoveForLinkedList() {
-        Iterator it = testList.iterator();
+        Iterator<LinkedList.Node> it = testList.iterator();
         while (it.hasNext()) {
             LinkedList.Node<String> o = (LinkedList.Node<String>) it.next();
             if (o.element.equals("FIVE")) {
@@ -105,11 +105,11 @@ public abstract class TestList {
             }
         }
         assertEquals("[ONE,TWO,THREE,FOUR]", testList.toString());
-    }
+    }*/
 
     @Test
-    public void testIteratorForArrayList() {
-        Iterator it = testList.iterator();
+    public void testIteratorRemoveForArrayList() {
+        Iterator<String> it = testList.iterator();
         while (it.hasNext()) {
             Object o = it.next();
             if (o.equals("FIVE")) {

@@ -1,5 +1,6 @@
 package datastructures.khamutov.lists;
 
+import java.lang.reflect.Array;
 import java.util.Iterator;
 import java.util.Objects;
 
@@ -8,7 +9,7 @@ public class ArrayList<T> implements List<T> {
     private final static double LOAD_FACTOR = 1.5;
 
 
-    private Object[] arraylist;
+    private T[] list;
     private int size;
 
 
@@ -16,18 +17,17 @@ public class ArrayList<T> implements List<T> {
         if (capacity < 0) {
             throw new IllegalArgumentException("list should be bigger then 0");
         } else {
-            arraylist = new Object[capacity];
+            list = (T[])new Object[capacity];
         }
     }
 
-    public ArrayList() {
-        arraylist = new Object[DEFAULT_CAPACITY];
-    }
+
+    public ArrayList() { list = (T[])new Object[DEFAULT_CAPACITY];}
 
     @Override
     public void add(T value) {
         increaseSizeIfNeeded();
-        arraylist[size] = value;
+        list[size] = value;
         size++;
     }
 
@@ -36,8 +36,8 @@ public class ArrayList<T> implements List<T> {
     public void add(T value, int index) {
         checkBoundForAdd(index);
         increaseSizeIfNeeded();
-        System.arraycopy(arraylist, index, arraylist, index + 1, size - index);
-        arraylist[index] = value;
+        System.arraycopy(list, index, list, index + 1, size - index);
+        list[index] = value;
         size++;
 
     }
@@ -45,32 +45,32 @@ public class ArrayList<T> implements List<T> {
     @Override
     public T remove(int i) {
         checkBound(i);
-        Object removedElement =arraylist[i];
-        System.arraycopy(arraylist, i + 1, arraylist, i, size - i - 1);
+        T removedElement = list[i];
+        System.arraycopy(list, i + 1, list, i, size - i - 1);
         size--;
-        return (T) removedElement;
+        return  removedElement;
     }
 
 
     @Override
     public T get(int i) {
         Objects.checkIndex(i, size);
-        return (T) arraylist[i];
+        return  list[i];
     }
 
 
     @Override
-    public T set(Object o, int i) {
+    public T set(T o, int i) {
         Objects.checkIndex(i, size);
-        Object value = arraylist[i];
-        arraylist[i] = o;
-        return (T) value;
+        T value = list[i];
+        list[i] = o;
+        return  value;
     }
 
     @Override
     public void clear() {
         size = 0;
-        arraylist = new Object[DEFAULT_CAPACITY];
+        list =(T[]) new Object[DEFAULT_CAPACITY];
     }
 
     @Override
@@ -90,8 +90,8 @@ public class ArrayList<T> implements List<T> {
 
     @Override
     public int indexOf(Object o) {
-        for (int i = 0; i < arraylist.length; i++) {
-            if (arraylist[i].equals(o)) {
+        for (int i = 0; i < list.length; i++) {
+            if (list[i].equals(o)) {
                 return i;
             }
         }
@@ -101,8 +101,8 @@ public class ArrayList<T> implements List<T> {
     @Override
     public int lastIndexOf(Object value) {
         int o = -1;
-        for (int i = 0; i < arraylist.length; i++) {
-            if (arraylist[i].equals(value)) {
+        for (int i = 0; i < list.length; i++) {
+            if (list[i].equals(value)) {
                 o = i;
             }
         }
@@ -113,7 +113,7 @@ public class ArrayList<T> implements List<T> {
     public String toString() {
         StringBuilder result = new StringBuilder("[");
         for (int i = 0; i < size; i++) {
-            result.append(arraylist[i]);
+            result.append(list[i]);
             result.append(",");
         }
         result = result.delete(result.length() - 1, result.length());
@@ -122,7 +122,7 @@ public class ArrayList<T> implements List<T> {
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<T> iterator() {
         return new Iterator() {
             int counter = 0;
 
@@ -133,7 +133,10 @@ public class ArrayList<T> implements List<T> {
 
             @Override
             public Object next() {
-                Object currentValue = arraylist[counter];
+                if(size==0){
+                    throw new IllegalArgumentException("The list is empty");
+                }
+                Object currentValue = list[counter];
                 counter++;
                 return currentValue;
             }
@@ -146,10 +149,10 @@ public class ArrayList<T> implements List<T> {
     }
 
     private void increaseSizeIfNeeded() {
-        if (arraylist.length == size) {
-            Object[] tempArray = new Object[(int) (arraylist.length * LOAD_FACTOR)];
-            System.arraycopy(arraylist, 0, tempArray, 0, size);
-            arraylist = tempArray;
+        if (list.length == size) {
+            T[] tempArray = (T[])new Object[(int) (list.length * LOAD_FACTOR)];
+            System.arraycopy(list, 0, tempArray, 0, size);
+            list = tempArray;
         }
     }
 

@@ -3,7 +3,7 @@ package datastructures.khamutov.lists;
 import java.util.Iterator;
 import java.util.Set;
 
-public interface Map<K,V> {
+public interface Map<K,V> extends Iterable {
 
     V put(K key, V value);
 
@@ -15,17 +15,14 @@ public interface Map<K,V> {
 
     Set<Entry<K, V>> entrySet(K key, V value);
 
-    default Iterator<Entry<K, V>> iterator(){
-        return null;
-    }
-}
 
-    public  class Entry<K, V>{
-    K key;
-    V value;
+     class Entry<K, V> {
+        K key;
+        V value;
 
-    public Entry(K key, V value) {
-        this.key = key;
-        this.value = value;
+        public Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
     }
 }

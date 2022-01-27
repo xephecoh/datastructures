@@ -160,15 +160,13 @@ public class LinkedList<T> implements List<T> {
             result.append(",");
             currentNode = currentNode.next;
         }
-         result.append(last.element);
-        //result = result.delete(result.length() - 1, result.length());
-       // result = result.delete(result.length() - 1, result.length());
+        result.append(last.element);
         result.append("]");
         return result.toString();
     }
 
     @Override
-    public Iterator iterator() {
+    public Iterator<T> iterator() {
         return new Iterator() {
 
             int counter = 0;
@@ -180,16 +178,19 @@ public class LinkedList<T> implements List<T> {
             }
 
             @Override
-            public Node<T> next() {
+            public T next() {
+                if(size==0){
+                    throw new IllegalArgumentException("The list is empty");
+                }
                 Node<T> tempValue = currentValue;
                 counter++;
                 currentValue = currentValue.next;
-                return tempValue;
+                return tempValue.element;
             }
 
             @Override
             public void remove() {
-                LinkedList.this.remove(counter-1);
+                LinkedList.this.remove(counter - 1);
             }
         };
     }

@@ -25,7 +25,7 @@ public interface List<T> extends Iterable {
 
     // we can set value by index between [0, size - 1]
     // otherwise throw new IndexOutOfBoundsException
-    Object set(Object value, int index);
+    Object set(T value, int index);
 
     void clear();
 
