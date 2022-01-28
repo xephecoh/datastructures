@@ -2,6 +2,7 @@ package datastructures.khamutov.lists;
 
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ public class ArrayListMap<K, V> implements Map<K, V> {
                 return entry.value;
             }
         }
-        return null;
+        throw new NoSuchElementException("No element with key " + key);
     }
 
 
@@ -90,7 +91,6 @@ public class ArrayListMap<K, V> implements Map<K, V> {
             ArrayList<Entry<K, V>> bucket;
             Entry<K, V> next;
 
-
             @Override
             public boolean hasNext() {
                 return counter < size;
@@ -98,22 +98,27 @@ public class ArrayListMap<K, V> implements Map<K, V> {
 
             @Override
             public Entry<K, V> next() {
-                while (buckets[arrayIndex] != null) {
-                    ArrayList<Entry<K, V>> bucket = buckets[arrayIndex];
-                    while (bucket.iterator().hasNext()) {
-                        next = bucket.iterator().next();
+                Iterator<Entry<K, V>> iterator;
+                while (counter < size) {
+                    bucket = buckets[arrayIndex];
+                    iterator = bucket.iterator();
+                    if (bucket == null) {
+                        arrayIndex++;
+                        continue;
+                    }
+                    while (iterator.hasNext()) {
+                        next = iterator.next();
                         counter++;
                         id++;
-                        return next;
                     }
-                    id=0;
-                    arrayIndex++;
+                    id = 0;
+                    return next;
                 }
-                return null;
+                 throw new NoSuchElementException("there are no next element in the map");
             }
             @Override
             public void remove() {
-                bucket.remove(id);
+                iterator().remove();
             }
         };
     }
