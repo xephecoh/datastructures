@@ -13,67 +13,87 @@ public class ArrayListMap<K, V> implements Map<K, V> {
 
 
     public ArrayListMap() {
-        this.buckets = (ArrayList<Entry<K, V>>[]) new Object[INITIAL_BUCKET_NUMBER];
+        this.buckets = (ArrayList<Entry<K, V>>[]) new ArrayList[INITIAL_BUCKET_NUMBER];
     }
 
-
+    @Override
     public V put(K key, V value) {
-        V tempValue = null;
-        Entry<K, V> entry = new Entry<>(key, value);
-        int numberOfBuckets = getBucketNumber(key);
-        for (Entry<K, V> tempEntry : buckets[numberOfBuckets]) {
-            if (Objects.equals(tempEntry.key, key)) {
-                tempValue = entry.value;
-                tempEntry.value = value;
-            }
+        V tempValue;
+        Entry<K, V> entry = getOptionalEntry(key);
+        int numberOfCurrentBucket = getBucketNumber(key);
+        if (buckets[numberOfCurrentBucket] == null) {
+            buckets[numberOfCurrentBucket] = new ArrayList<>();
+            buckets[numberOfCurrentBucket].add(new Entry<>(key, value));
+            size++;
+            return null;
         }
-        buckets[numberOfBuckets].add(entry);
-        size++;
+        if (entry == null) {
+            buckets[numberOfCurrentBucket].add(new Entry<>(key, value));
+            size++;
+            return null;
+        }
+        tempValue = entry.value;
+        entry.value = value;
         return tempValue;
     }
 
-    public V remove(K key, V value) {
-        V tempValue = null;
-        Entry<K, V> entry = new Entry<>(key, value);
-        int numberOfBuckets = getBucketNumber(key);
-        for (Entry<K, V> tempEntry : buckets[numberOfBuckets]) {
-            if (Objects.equals(tempEntry.key, key)) {
-                tempValue = entry.value;
-                tempEntry = null;
 
+    private Entry<K, V> getOptionalEntry(K key) {
+        List<Entry<K, V>> bucketList = buckets[getBucketNumber(key)];
+        if (bucketList == null) {
+            return null;
+        }
+        for (Entry<K, V> entry : bucketList) {
+            if (Objects.equals(entry.key, key)) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public Entry<K, V> remove(K key) {
+        Entry<K, V> entry = getOptionalEntry(key);
+        if (entry == null) {
+            throw new NoSuchElementException("No value with key " + key.toString());
+        }
+        int numberOfBuckets = getBucketNumber(key);
+        Iterator<Entry<K, V>> iterator = buckets[numberOfBuckets].iterator();
+        while (iterator.hasNext()) {
+            if (iterator.next().key == key) {
+                iterator.remove();
             }
         }
         buckets[numberOfBuckets].add(entry);
-        size++;
-        return tempValue;
+        size--;
+        return entry;
     }
 
 
     private int getBucketNumber(K key) {
-        int bucketNumber = key.hashCode() % buckets.length;
+        int bucketNumber = Math.abs(key.hashCode() % buckets.length);
         return bucketNumber;
     }
 
     @Override
     public V get(K key) {
         int bucketNumber = getBucketNumber(key);
-        for (Entry<K, V> entry : buckets[bucketNumber]) {
-            if (Objects.equals(entry.key, key)) {
-                return entry.value;
-            }
+        Entry<K, V> optionalEntry = getOptionalEntry(key);
+        if (optionalEntry == null) {
+            throw new NoSuchElementException("No value with key " + key.toString());
         }
-        throw new NoSuchElementException("No element with key " + key);
+        return optionalEntry.value;
     }
 
 
     @Override
     public boolean containsKey(K key) {
-        return false;
+        return getOptionalEntry(key) != null;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
@@ -86,10 +106,10 @@ public class ArrayListMap<K, V> implements Map<K, V> {
     public Iterator iterator() {
         return new Iterator<Entry<K, V>>() {
             int counter = 0;
-            int id = 0;
-            int arrayIndex = 0;
+            int arrayPointer = 0;
             ArrayList<Entry<K, V>> bucket;
             Entry<K, V> next;
+            Iterator<Entry<K, V>> iterator;
 
             @Override
             public boolean hasNext() {
@@ -98,24 +118,27 @@ public class ArrayListMap<K, V> implements Map<K, V> {
 
             @Override
             public Entry<K, V> next() {
-                Iterator<Entry<K, V>> iterator;
-                while (counter < size) {
-                    bucket = buckets[arrayIndex];
-                    iterator = bucket.iterator();
+
+                while (arrayPointer < INITIAL_BUCKET_NUMBER) {
+                    bucket = buckets[arrayPointer];
+                    if (iterator == null) {
+                        iterator = bucket.iterator();
+                    }
                     if (bucket == null) {
-                        arrayIndex++;
+                        arrayPointer++;
                         continue;
                     }
-                    while (iterator.hasNext()) {
+                    if (iterator.hasNext()) {
                         next = iterator.next();
                         counter++;
-                        id++;
+                        return next;
+                    } else {
+                        arrayPointer++;
                     }
-                    id = 0;
-                    return next;
                 }
-                 throw new NoSuchElementException("there are no next element in the map");
+                throw new NoSuchElementException("There are no next element in the map");
             }
+
             @Override
             public void remove() {
                 iterator().remove();

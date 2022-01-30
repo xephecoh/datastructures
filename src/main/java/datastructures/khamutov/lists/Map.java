@@ -9,6 +9,8 @@ public interface Map<K,V> extends Iterable {
 
     V get(K key);
 
+    Entry<K, V> remove(K key);
+
     boolean containsKey(K key);
 
     int size();
