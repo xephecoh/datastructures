@@ -7,16 +7,19 @@ import java.util.Arrays;
 
 public class test {
     public static void main(String[] args) throws IOException, InterruptedException {
-        FileInputStream fileInputStream = new FileInputStream("test.text");
+        FileInputStream fileInputStream = new FileInputStream("src/test.txt");
         System.out.println(fileInputStream.read());
 
         int value;
         while((value=fileInputStream.read())!=-1){
             System.out.println((char) value);
         }
-        System.out.println("finito");
 
-        Thread.sleep(15_0000);
+        Thread.sleep(10_0000);
+
+        while((value=fileInputStream.read())!=-1){
+            System.out.println((char) value);
+        }
 
     }
 }
