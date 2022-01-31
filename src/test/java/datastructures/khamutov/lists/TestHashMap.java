@@ -21,12 +21,12 @@ public class TestHashMap {
 
     @Test
     public void testIterator() {
-        StringJoiner stringBuilder = new StringJoiner(",");
+        StringJoiner stringJoiner = new StringJoiner(",");
         Iterator<Map.Entry<Integer, String>> it = testMap.iterator();
         while (it.hasNext()) {
-            stringBuilder.add(it.next().value);
+            stringJoiner.add(it.next().value);
         }
-        assertEquals("ONE,TWO,THREE", stringBuilder.toString());
+        assertEquals("ONE,TWO,THREE", stringJoiner.toString());
 
     }
 
@@ -43,7 +43,6 @@ public class TestHashMap {
             stringBuilder.add(next.value);
         }
         assertEquals("ONE,THREE", stringBuilder.toString());
-
     }
 
     @Test
@@ -65,13 +64,12 @@ public class TestHashMap {
     @Test
     public void testRemove() {
         assertEquals("ONE", testMap.remove(1).value);
-        StringJoiner stringBuilder = new StringJoiner(",");
+        StringJoiner stringJoiner = new StringJoiner(",");
         Iterator<Map.Entry<Integer, String>> it = testMap.iterator();
         while (it.hasNext()) {
-            stringBuilder.add(it.next().value);
+            stringJoiner.add(it.next().value);
         }
-        assertEquals("TWO,THREE", stringBuilder.toString());
-
+        assertEquals("TWO,THREE", stringJoiner.toString());
     }
 
     @Test
