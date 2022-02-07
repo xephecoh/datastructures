@@ -1,5 +1,7 @@
-package datastructures.khamutov.lists;
+package map;
 
+import datastructures.khamutov.map.ArrayListMap;
+import datastructures.khamutov.map.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,7 +12,7 @@ import java.util.StringJoiner;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestHashMap {
-    Map<Integer, String> testMap = new ArrayListMap<>();
+    Map<Integer, String> testMap = new ArrayListMap<>(buckets.length * 2);
 
     @BeforeEach
     public void init() {
@@ -27,7 +29,6 @@ public class TestHashMap {
             stringJoiner.add(it.next().value);
         }
         assertEquals("ONE,TWO,THREE", stringJoiner.toString());
-
     }
 
     @Test

@@ -1,5 +1,8 @@
-package datastructures.khamutov.lists;
+package datastructures.khamutov.map;
 
+
+import datastructures.khamutov.lists.ArrayList;
+import datastructures.khamutov.lists.List;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -9,10 +12,15 @@ public class ArrayListMap<K, V> implements Map<K, V> {
     final static int INITIAL_BUCKET_NUMBER = 5;
     private int size;
     ArrayList<Entry<K, V>>[] buckets;
+    private float LOAD_FACTOR = 0.75f;
 
 
     public ArrayListMap() {
         this.buckets = (ArrayList<Entry<K, V>>[]) new ArrayList[INITIAL_BUCKET_NUMBER];
+    }
+
+    public ArrayListMap(int newSize) {
+        this.buckets = (ArrayList<Entry<K, V>>[]) new ArrayList[newSize];
     }
 
     @Override
@@ -27,6 +35,10 @@ public class ArrayListMap<K, V> implements Map<K, V> {
             return null;
         }
         if (entry == null) {
+            if (mustBeExtended()) {
+                increaseSize();
+                numberOfCurrentBucket = getBucketNumber(key);
+            }
             buckets[numberOfCurrentBucket].add(new Entry<>(key, value));
             size++;
             return null;
@@ -36,12 +48,22 @@ public class ArrayListMap<K, V> implements Map<K, V> {
         return tempValue;
     }
 
+    private boolean mustBeExtended() {
+        return buckets.length * LOAD_FACTOR <= size;
+    }
+
+    private void increaseSize() {
+        ArrayListMap<K, V> extendedMap = new ArrayListMap<>(buckets.length * 2);
+        this.forEach(entry -> extendedMap.put(entry.key, entry.value));
+        buckets = extendedMap.buckets;
+    }
+
 
     @Override
     public Entry<K, V> remove(K key) {
         int numberOfBucket = getBucketNumber(key);
         ArrayList<Entry<K, V>> bucketWithElement = buckets[numberOfBucket];
-        if(bucketWithElement == null){
+        if (bucketWithElement == null) {
             throw new NoSuchElementException("No value with key " + key.toString());
         }
         Entry<K, V> entry = getOptionalEntry(key);
@@ -78,15 +100,13 @@ public class ArrayListMap<K, V> implements Map<K, V> {
     }
 
 
-
     @Override
     public Iterator iterator() {
         return new Iterator<Map.Entry<K, V>>() {
-            int counter = 0;
+            int counter;
             int arrayPointer = 0;
-            ArrayList<Entry<K, V>> bucket;
-            Entry<K, V> next;
             Iterator<Entry<K, V>> listIterator;
+            boolean isRemoved = false;
 
 
             @Override
@@ -98,7 +118,7 @@ public class ArrayListMap<K, V> implements Map<K, V> {
             public Entry<K, V> next() {
 
                 while (arrayPointer < INITIAL_BUCKET_NUMBER) {
-                    bucket = buckets[arrayPointer];
+                    ArrayList<Entry<K, V>> bucket = buckets[arrayPointer];
                     if (bucket == null) {
                         arrayPointer++;
                         continue;
@@ -107,8 +127,9 @@ public class ArrayListMap<K, V> implements Map<K, V> {
                         listIterator = bucket.iterator();
                     }
                     if (listIterator.hasNext()) {
-                        next = listIterator.next();
+                        Entry<K, V> next = listIterator.next();
                         counter++;
+                        isRemoved = true;
                         return next;
                     } else {
                         arrayPointer++;
@@ -119,8 +140,13 @@ public class ArrayListMap<K, V> implements Map<K, V> {
             }
 
             @Override
-            public void remove() {
+            public void remove() throws IllegalStateException {
+                if (!isRemoved) {
+                    throw new IllegalStateException("removed called without next");
+                }
                 listIterator.remove();
+                size--;
+                isRemoved = false;
             }
         };
     }
@@ -137,7 +163,9 @@ public class ArrayListMap<K, V> implements Map<K, V> {
         }
         return null;
     }
+
     private int getBucketNumber(K key) {
-        return Math.abs(key.hashCode() % buckets.length);
+        return Math.abs(key.hashCode()) % buckets.length;
     }
+
 }
